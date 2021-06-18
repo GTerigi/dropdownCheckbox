@@ -9,13 +9,19 @@
         top: null,
         body: null,
         checkData: [],
-        paragraph: []
+        paragraph: [],
+        checkboxTot: 0,
+        checkboxSel: 0
     };
     let availableMethods = {
         init,
         getData,
+        hasData,
         setData,
-        removeData
+        removeData,
+        checkAll,
+        getCountSel,
+        getCountTot
     };
 
     /**
@@ -40,12 +46,15 @@
      * @description initialize the state and set the event handler.
      * @return {*|jQuery|HTMLElement}
      */
-    function init() {
+    function init(opt = {}) {
+        opt = { classLike: false, ...opt };
         prvState.top = $(this).find(".dropdown-select-top");
         prvState.body = $(this).find(".dropdown-select-body");
         prvState.top.on("click", () => prvState.body.slideToggle("fast"));
+        prvState.checkboxTot = prvState.body.find("input[type='checkbox']").length;
         prvState.body.find("input[type='checkbox']").on("click", propValue);
-        return $(this);
+        let ref = { ...this, ...availableMethods };
+        return opt.classLike ? ref : $(this);
     }
 
     /**
@@ -57,12 +66,45 @@
     }
 
     /**
+     * @description Check if data is inside checkbox;
+     * @param {Number|String} data Data to check
+     * @return {Boolean}
+     */
+    function hasData(data) {
+        return prvState.checkData.includes(data.toString());
+    }
+
+    /**
+     * @description return the number of checkbox selected
+     * @return {Number} number of checkbox selected
+     */
+    function getCountSel() {
+        return prvState.checkboxSel;
+    }
+
+    /**
+     * @description return the total number of checkbox
+     * @return {Number} total number of checkbox
+     */
+    function getCountTot() {
+        return prvState.checkboxTot;
+    }
+
+    /**
      * @description Set and push inside the pvtState the value inside arrData.
      * @param {[]} arrData new data to push
      */
     function setData(arrData) {
         arrData.forEach(data => {
             let paragText = $(prvState.body).find(`input[value='${data}']`).closest("li").text();
+            pushData(data.toString(), paragText, true);
+        });
+    }
+
+    function checkAll() {
+        $(prvState.body).find(`input`).each(function () {
+            let data = $(this).val();
+            let paragText = $(this).closest("li").text();
             pushData(data.toString(), paragText, true);
         });
     }
@@ -110,6 +152,7 @@
         if (prop) $(prvState.body).find(`input[value='${data}']`).prop("checked", true);
         prvState.checkData.push(data);
         prvState.paragraph.push(textParag);
+        prvState.checkboxSel++;
         showHideParagraph();
     }
 
@@ -124,6 +167,7 @@
         if (prop) $(prvState.body).find(`input[value='${data}']`).prop("checked", false);
         prvState.checkData.splice(prvState.checkData.indexOf(data), 1);
         prvState.paragraph.splice(prvState.paragraph.indexOf(textParag), 1);
+        prvState.checkboxSel--;
         showHideParagraph();
     }
 
