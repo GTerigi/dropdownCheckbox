@@ -63,7 +63,7 @@
     function setData(arrData) {
         arrData.forEach(data => {
             let paragText = $(prvState.body).find(`input[value='${data}']`).closest("li").text();
-            pushData(data, paragText, true);
+            pushData(data.toString(), paragText, true);
         });
     }
 
@@ -75,7 +75,7 @@
         if (arrData.length !== 0) {
             arrData.forEach(data => {
                 let paragText = $(prvState.body).find(`input[value='${data}']`).closest("li").text();
-                popData(data, paragText, true);
+                popData(data.toString(), paragText, true);
             });
         } else {
             // Remove everything
@@ -106,6 +106,7 @@
      * @param {Boolean} prop if true force to prop the checkbox to :checked
      */
     function pushData(data, textParag, prop = false) {
+        if (prvState.checkData.includes(data)) return;
         if (prop) $(prvState.body).find(`input[value='${data}']`).prop("checked", true);
         prvState.checkData.push(data);
         prvState.paragraph.push(textParag);
@@ -119,6 +120,7 @@
      * @param {Boolean} prop if true force to prop the checkbox to NOT :checked
      */
     function popData(data, textParag, prop = false) {
+        if (!prvState.checkData.includes(data)) return;
         if (prop) $(prvState.body).find(`input[value='${data}']`).prop("checked", false);
         prvState.checkData.splice(prvState.checkData.indexOf(data), 1);
         prvState.paragraph.splice(prvState.paragraph.indexOf(textParag), 1);
@@ -141,3 +143,18 @@
         }
     }
 })(jQuery);
+/*
+<div class="dropdown-checkbox-wrap">
+  <div class="dropdown-select-top">
+    <span class="dropdown-hide-on-select">Seleziona</span>
+    <p class="dropdown-checkbox-selected"></p>
+  </div>
+  <div class="dropdown-select-body">
+    <ul>
+      <li><input type="checkbox" value="1">Apple</li>
+      <li><input type="checkbox" value="2">Samsung</li>
+      <li><input type="checkbox" value="3">Sony</li>
+    </ul>
+  </div>
+</div>
+ */
