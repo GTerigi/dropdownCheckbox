@@ -9,7 +9,8 @@ Just download the minified file and link it as resource in your project. Use the
 ## Working Fiddle on [CodePen](https://codepen.io/gterigi/pen/qBrgEOR)
 * * *
 
-### Initialization
+# Method
+### Initialization as jQuery Plugin
 
 ```html
 <!-- .dropdown-checkbox-wrap is the wrapper, whatever you want to call it is fine. -->
@@ -31,7 +32,7 @@ Just download the minified file and link it as resource in your project. Use the
 </div>
 ```
 
-If you want to initialize the dropdown checkbox you just need to 
+If you want to initialize the dropdown checkbox:
 ```javascript
 let dropdown = $(".dropdown-checkbox-wrap").dropdownCheckbox();
 ```
@@ -41,6 +42,11 @@ let dropdown = $(".dropdown-checkbox-wrap").dropdownCheckbox();
   let data= $(dropdown).dropdownCheckbox("getData");
 ```
 Returns the array containing the value of the checkbox checked.
+### Check if has some data
+```javascript
+  let boolval= $(dropdown).dropdownCheckbox("hasData",2);
+```
+Check if the value 2 is inside the state.
 
 ### Set the Data manually
 ```javascript
@@ -60,3 +66,41 @@ Remove from the array all the value passed as argument (all value is empty array
 To avoid type mismatch with the checkbox type value (string) all the data inside the array is parsed as string and not as integer. 
 
 The checkbox and header are updated.
+
+## Utility
+
+### Count selected checkbox
+```javascript
+  let numberCheckboxSelected= $(dropdown).dropdownCheckbox("getCountSel");
+```
+return the number of checkbox selected 
+
+### Count selected checkbox
+```javascript
+  let numberCheckboxTot= $(dropdown).dropdownCheckbox("getCountTot");
+```
+return the number of initial checkbox inside the select (checkbox added after the initialization are not counted)
+
+### CheckAll Checkbox
+```javascript
+  let numberCheckboxTot= $(dropdown).dropdownCheckbox("checkAll");
+```
+Check all checkbox and push their value in the state.
+
+
+# Initialize as pseudo-class
+If you want to work with it like a class, you just need to initilize the select like that:
+```javascript
+let dropdown = $(".dropdown-checkbox-wrap").dropdownCheckbox({classLike:true});
+```
+And you can access the public Method just like this:
+```javascript
+let data = dropdown.getData();
+let boolVal= dropdown.hasData();
+dropdown.setData([1,2,3]);
+dropdown.removeData([1,2,3]);
+dropdown.removeData();
+dropdown.checkAll();
+dropdown.getCountSel();
+dropdown.getCountTot();
+```
