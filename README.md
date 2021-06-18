@@ -48,9 +48,9 @@ Returns the array containing the value of the checkbox checked.
 ```
 Check if the value 2 is inside the state.
 
-### Set the Data manually
+### Set or Add the Data manually
 ```javascript
-  $(dropdown).dropdownCheckbox("setData",[1,2,4]);
+  $(dropdown).dropdownCheckbox("addData",[1,2,4]);
 ```
 Set checked all the checkbox with the value equals to the value passed in the array.
 To avoid type mismatch with the checkbox type value (string) all the data inside the array is parsed as string and not as integer. 
@@ -97,7 +97,7 @@ And you can access the public Method just like this:
 ```javascript
 let data = dropdown.getData();
 let boolVal= dropdown.hasData();
-dropdown.setData([1,2,3]);
+dropdown.addData([1,2,3]);
 dropdown.removeData([1,2,3]);
 dropdown.removeData();
 dropdown.checkAll();
