@@ -17,7 +17,7 @@
         init,
         getData,
         hasData,
-        setData,
+        addData,
         removeData,
         checkAll,
         getCountSel,
@@ -94,7 +94,7 @@
      * @description Set and push inside the pvtState the value inside arrData.
      * @param {[]} arrData new data to push
      */
-    function setData(arrData) {
+    function addData(arrData) {
         arrData.forEach(data => {
             let paragText = $(prvState.body).find(`input[value='${data}']`).closest("li").text();
             pushData(data.toString(), paragText, true);
