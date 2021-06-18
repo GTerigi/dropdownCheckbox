@@ -1,0 +1,46 @@
+/*
+If you want, you can customize the look and feel of the select with this parameters
+ */
+$padding: .5rem 1rem;
+$border: 1px solid black;
+$top-border-radius: 2px;
+$top-height: 3rem;
+$width: inherit; // Inherith the width of the container
+$background-color: inherit;
+.dropdown-select-top {
+  cursor: pointer;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  overflow: hidden;
+  height: $top-height;
+  background-color: $background-color;
+  width: $width;
+  padding: $padding;
+  border: $border;
+  border-radius: $top-border-radius;
+
+  p, span {
+    margin: 0;
+    padding: 0;
+  }
+
+  // The paragraph is initially hidden.
+  .dropdown-checkbox-selected {
+    display: none;
+  }
+}
+
+.dropdown-select-body {
+  display: none;
+  border:$border;
+  border-top: none;
+  padding: $padding;
+  width: $width;
+  background-color: $background-color;
+
+  ul {
+    padding: 0;
+    list-style: none;
+  }
+}
