@@ -1,68 +1,27 @@
-/**
- * @author GTerigi https://github.com/GTerigi
- * @description Simple Plugin jQuery to manage a custom select with checkbox inside
- * It will receive further modification if I need to implement something else at work
- */
-(function ($) {
-    // Current state of the select, and the jQuery ref to the body and the top of the select
-    let prvState = {
-        top: null,
-        body: null,
-        checkData: [],
-        paragraph: [],
-        checkboxTot: 0,
-        checkboxSel: 0
-    };
-    let availableMethods = {
-        init,
-        getData,
-        hasData,
-        addData,
-        removeData,
-        checkAll,
-        getCountSel,
-        getCountTot
-    };
+class dropdownCheckbox {
+    #top;
+    #body;
+    #checkData = [];
+    #paragraph = [];
+    #checkboxTot = 0;
+    #checkboxSel = 0;
 
-    /**
-     * @description Base code for the jQuery plugin
-     * @param {Object|string|null} chosenMethod It's a string if you want to invoke a method, Object or null for the initialization
-     * @return {*|jQuery|HTMLElement}
-     */
-    $.fn.dropdownCheckbox = function (chosenMethod) {
-        if (typeof chosenMethod === "string" && availableMethods[chosenMethod]) {
-            // Chiamo il metodo puntato da "method" e gli passo eventuali argomenti passati come secondo parametro.
-            return availableMethods[chosenMethod].apply(this, Array.prototype.slice.call(arguments, 1));
-        } else if (typeof chosenMethod === "object" || !chosenMethod) {
-            // Default to "init"
-            return availableMethods.init.apply(this, arguments);
-        } else {
-            $.error("Method " + chosenMethod + " does not exist on jQuery.dropdownCheckbox");
-        }
-    };
-
-    /* ==== PUBLIC ==== */
-    /**
-     * @description initialize the state and set the event handler.
-     * @return {*|jQuery|HTMLElement}
-     */
-    function init(opt = {}) {
-        opt = { classLike: false, ...opt };
-        prvState.top = $(this).find(".dropdown-select-top");
-        prvState.body = $(this).find(".dropdown-select-body");
-        prvState.top.on("click", () => prvState.body.slideToggle("fast"));
-        prvState.checkboxTot = prvState.body.find("input[type='checkbox']").length;
-        prvState.body.find("input[type='checkbox']").on("click", propValue);
-        let ref = { ...this, ...availableMethods };
-        return opt.classLike ? ref : $(this);
+    constructor($where) {
+        this.#top = $where.find(".dropdown-select-top");
+        this.#body = $where.find(".dropdown-select-body");
+        let this_ref = this;
+        $(this.#top).on("click", () => $(this.#body).slideToggle("fast"));
+        $(this.#body).find("input[type='checkbox']").on("click", function () {
+            this_ref.#propValue(this);
+        });
     }
 
     /**
      * @description fetch and return the array of value kept in prvState
      * @return {[]}
      */
-    function getData() {
-        return prvState.checkData;
+    getData() {
+        return this.#checkData;
     }
 
     /**
@@ -70,42 +29,47 @@
      * @param {Number|String} data Data to check
      * @return {Boolean}
      */
-    function hasData(data) {
-        return prvState.checkData.includes(data.toString());
+    hasData(data) {
+        return this.#checkData.includes(data.toString());
     }
 
     /**
      * @description return the number of checkbox selected
      * @return {Number} number of checkbox selected
      */
-    function getCountSel() {
-        return prvState.checkboxSel;
+    getCountSel() {
+        return this.#checkboxSel;
     }
 
     /**
      * @description return the total number of checkbox
      * @return {Number} total number of checkbox
      */
-    function getCountTot() {
-        return prvState.checkboxTot;
+    getCountTot() {
+        return this.#checkboxTot;
     }
 
     /**
      * @description Set and push inside the pvtState the value inside arrData.
      * @param {[]} arrData new data to push
      */
-    function addData(arrData) {
+    addData(arrData) {
         arrData.forEach(data => {
-            let paragText = $(prvState.body).find(`input[value='${data}']`).closest("li").text();
-            pushData(data.toString(), paragText, true);
+            let el = $(this.#body).find(`input[value='${data}']`);
+            let paragText = $(el).closest("li").text();
+            this.#pushData(data.toString(), paragText, el);
         });
     }
 
-    function checkAll() {
-        $(prvState.body).find(`input`).each(function () {
+    /**
+     * @description Check all the checkbox and push their value in the state.
+     */
+    checkAll() {
+        let this_ref = this;
+        $(this.#body).find(`input`).each(function () {
             let data = $(this).val();
             let paragText = $(this).closest("li").text();
-            pushData(data.toString(), paragText, true);
+            this_ref.#pushData(data.toString(), paragText, this);
         });
     }
 
@@ -113,92 +77,78 @@
      * @description if the first argument is an empty array then it wipe off the pvtState, else it remove just the data passed as argument in the array.
      * @param {[]} arrData empty or with value to remove.
      */
-    function removeData(arrData = []) {
+    removeData(arrData = []) {
         if (arrData.length !== 0) {
             arrData.forEach(data => {
-                let paragText = $(prvState.body).find(`input[value='${data}']`).closest("li").text();
-                popData(data.toString(), paragText, true);
+                let el = $(this.#body).find(`input[value='${data}']`);
+                let paragText = $(el).closest("li").text();
+                this.#popData(data.toString(), paragText, el);
             });
         } else {
             // Remove everything
-            prvState.checkData.splice(0, prvState.checkData.length);
-            prvState.paragraph.splice(0, prvState.paragraph.length);
-            $(prvState.body).find(`input`).prop("checked", false);
-            showHideParagraph();
+            this.#checkData.splice(0, this.#checkData.length);
+            this.#paragraph.splice(0, this.#paragraph.length);
+            $(this.#body).find(`input`).prop("checked", false);
+            this.#showHideParagraph();
         }
     }
 
-    /* ==== PRIVATE ==== */
     /**
      * @description fires the event handler when a checkbox is clicked.
      * If it's checked the value of the checkbox is pushed inside the prvState
      * else il popped.
      */
-    function propValue() {
-        let data = $(this).val();
-        let textParag = $(this).closest("li").text();
-        if ($(this).is(":checked")) pushData(data, textParag);
-        else popData(data, textParag);
+    #propValue(element) {
+        console.log("propValue", $(element));
+        let data = $(element).val();
+        let textParag = $(element).closest("li").text();
+        if ($(element).is(":checked")) this.#pushData(data, textParag);
+        else this.#popData(data, textParag);
     }
 
     /**
      * @description Push the new data and text for the paragraph inside the state
      * @param {string} data the new value from the checkbox
      * @param {string} textParag the text from the <li> tag
-     * @param {Boolean} prop if true force to prop the checkbox to :checked
+     * @param el {jQuery} Dom element
      */
-    function pushData(data, textParag, prop = false) {
-        if (prvState.checkData.includes(data)) return;
-        if (prop) $(prvState.body).find(`input[value='${data}']`).prop("checked", true);
-        prvState.checkData.push(data);
-        prvState.paragraph.push(textParag);
-        prvState.checkboxSel++;
-        showHideParagraph();
+    #pushData(data, textParag, el = undefined) {
+        if (this.#checkData.includes(data)) return;
+        if (el) $(el).prop("checked", true);
+        this.#checkData.push(data);
+        this.#paragraph.push(textParag);
+        this.#checkboxSel++;
+        this.#showHideParagraph();
     }
 
     /**
      * @description Pop the selected data and text for the paragraph from the state
      * @param {string} data value to pop
      * @param {string} textParag the text from the <li> tag
-     * @param {Boolean} prop if true force to prop the checkbox to NOT :checked
+     * @param el {jQuery} Dom element
      */
-    function popData(data, textParag, prop = false) {
-        if (!prvState.checkData.includes(data)) return;
-        if (prop) $(prvState.body).find(`input[value='${data}']`).prop("checked", false);
-        prvState.checkData.splice(prvState.checkData.indexOf(data), 1);
-        prvState.paragraph.splice(prvState.paragraph.indexOf(textParag), 1);
-        prvState.checkboxSel--;
-        showHideParagraph();
+    #popData(data, textParag, el = undefined) {
+        if (!this.#checkData.includes(data)) return;
+        if (el) $(el).prop("checked", false);
+        this.#checkData.splice(this.#checkData.indexOf(data), 1);
+        this.#paragraph.splice(this.#paragraph.indexOf(textParag), 1);
+        this.#checkboxSel--;
+        this.#showHideParagraph();
     }
 
     /**
      * @description Put into the paragraph all the text from the checkbox checked. If none, the paragraph disappear and the classic header is shown.
      */
-    function showHideParagraph() {
-        $(prvState.top).find("p.dropdown-checkbox-selected").text(prvState.paragraph.join(", "));
-        if (prvState.paragraph.length === 0) {
+    #showHideParagraph() {
+        $(this.#top).find("p.dropdown-checkbox-selected").text(this.#paragraph.join(", "));
+        if (this.#paragraph.length === 0) {
             // No tag selected, so i need to hide the paragraph from the dom and show the selection header again.
-            $(prvState.top).find(".dropdown-hide-on-select").show();
-            $(prvState.top).find(".dropdown-checkbox-selected").hide();
+            $(this.#top).find(".dropdown-hide-on-select").show();
+            $(this.#top).find(".dropdown-checkbox-selected").hide();
         } else {
             // I have some tag to show, no need for the select header
-            $(prvState.top).find(".dropdown-hide-on-select").hide();
-            $(prvState.top).find(".dropdown-checkbox-selected").show();
+            $(this.#top).find(".dropdown-hide-on-select").hide();
+            $(this.#top).find(".dropdown-checkbox-selected").show();
         }
     }
-})(jQuery);
-/*
-<div class="dropdown-checkbox-wrap">
-  <div class="dropdown-select-top">
-    <span class="dropdown-hide-on-select">Seleziona</span>
-    <p class="dropdown-checkbox-selected"></p>
-  </div>
-  <div class="dropdown-select-body">
-    <ul>
-      <li><input type="checkbox" value="1">Apple</li>
-      <li><input type="checkbox" value="2">Samsung</li>
-      <li><input type="checkbox" value="3">Sony</li>
-    </ul>
-  </div>
-</div>
- */
+}

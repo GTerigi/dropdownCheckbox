@@ -33,7 +33,7 @@ $background-color: inherit;
 
 .dropdown-select-body {
   display: none;
-  border:$border;
+  border: $border;
   border-top: none;
   padding: $padding;
   width: $width;
@@ -42,5 +42,27 @@ $background-color: inherit;
   ul {
     padding: 0;
     list-style: none;
+
+    [type="checkbox"].browser-default,
+    [type="checkbox"].browser-default:checked,
+    [type="checkbox"].browser-default:not(checked) {
+      opacity: 1;
+      position: relative;
+      margin-right: .5rem;
+      pointer-events: all;
+    }
+
+    [type="checkbox"].browser-default + span::before,
+    [type="checkbox"].browser-default + span::after,
+    [type="checkbox"].browser-default:checked + span::before,
+    [type="checkbox"].browser-default:checked + span::after {
+      display: none;
+    }
+
+    [type="checkbox"].browser-default + span:not(.lever) {
+      padding-left: 10px;
+    }
   }
+
 }
+
