@@ -41,13 +41,13 @@ let dropdown = new dropdownCheckbox($(".whatever-selector-you-want"));
 Returns the array containing the value of the checkbox checked.
 ### Check if has some data
 ```javascript
-  let boolval = dropdown.hasData(2);
+let boolval = dropdown.hasData(2);
 ```
 Check if the value 2 is inside the state.
 
 ### Set or Add the Data manually
 ```javascript
-	dropdown.addData([1,2,3]);
+dropdown.addData([1,2,3]);
 ```
 Set checked all the checkbox with the value equals to the value passed in the array.
 To avoid type mismatch with the checkbox type value (string) all the data inside the array is parsed as string and not as integer. 
@@ -56,8 +56,8 @@ The checkbox and header are updated.
 
 ### Remove some or all Data
 ```javascript
-	dropdown.removeData([1,2,3]); // Specify the data to remove.
-	dropdown.removeData(); // Remove all Data
+dropdown.removeData([1,2,3]); // Specify the data to remove.
+dropdown.removeData(); // Remove all Data
 ```
 Remove from the array all the value passed as argument (all value is empty array or null is passed).
 To avoid type mismatch with the checkbox type value (string) all the data inside the array is parsed as string and not as integer. 
@@ -68,18 +68,18 @@ The checkbox and header are updated.
 
 ### Count selected checkbox
 ```javascript
-  let numberCheckboxSelected = dropdown.getCountSel();
+let numberCheckboxSelected = dropdown.getCountSel();
 ```
 return the number of checkbox selected 
 
 ### Count selected checkbox
 ```javascript
-  let numberCheckboxTot = dropdown.getCountTot();
+let numberCheckboxTot = dropdown.getCountTot();
 ```
 return the number of initial checkbox inside the select (checkbox added after the initialization are not counted)
 
 ### CheckAll Checkbox
 ```javascript
-  let numberCheckboxTot = dropdown.checkAll();
+let numberCheckboxTot = dropdown.checkAll();
 ```
 Check all checkbox and push their value in the state.
