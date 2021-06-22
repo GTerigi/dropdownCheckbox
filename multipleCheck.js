@@ -9,6 +9,7 @@ class dropdownCheckbox {
     constructor($where) {
         this.#top = $where.find(".dropdown-select-top");
         this.#body = $where.find(".dropdown-select-body");
+        this.#checkboxTot = $(this.#body).find("input[type='checkbox']").length;
         let this_ref = this;
         $(this.#top).on("click", () => $(this.#body).slideToggle("fast"));
         $(this.#body).find("input[type='checkbox']").on("click", function () {
@@ -99,7 +100,6 @@ class dropdownCheckbox {
      * else il popped.
      */
     #propValue(element) {
-        console.log("propValue", $(element));
         let data = $(element).val();
         let textParag = $(element).closest("li").text();
         if ($(element).is(":checked")) this.#pushData(data, textParag);
