@@ -1,24 +1,25 @@
 /*
 If you want, you can customize the look and feel of the select with this parameters
  */
-$padding: .5rem 1rem;
-$border: 1px solid black;
-$top-border-radius: 2px;
-$top-height: 3rem;
-$width: inherit; // Inherith the width of the container
-$background-color: inherit;
+$padding_multipleCheckbox: .5rem 1rem;
+$border_multipleCheckbox: 1px solid black;
+$top-border-radius_multipleCheckbox: 2px;
+$top-height_multipleCheckbox: 3rem;
+$width_multipleCheckbox: inherit; // Inherith the width of the container
+$background-color_multipleCheckbox: inherit;
+
 .dropdown-select-top {
   cursor: pointer;
   display: flex;
   justify-content: left;
   align-items: center;
   overflow: hidden;
-  height: $top-height;
-  background-color: $background-color;
-  width: $width;
-  padding: $padding;
-  border: $border;
-  border-radius: $top-border-radius;
+  height: $top-height_multipleCheckbox;
+  background-color: $background-color_multipleCheckbox;
+  width: $width_multipleCheckbox;
+  padding: $padding_multipleCheckbox;
+  border: $border_multipleCheckbox;
+  border-radius: $top-border-radius_multipleCheckbox;
 
   p, span {
     margin: 0;
@@ -33,36 +34,15 @@ $background-color: inherit;
 
 .dropdown-select-body {
   display: none;
-  border: $border;
+  border: $border_multipleCheckbox;
   border-top: none;
-  padding: $padding;
-  width: $width;
-  background-color: $background-color;
+  padding: $padding_multipleCheckbox;
+  width: $width_multipleCheckbox;
+  background-color: $background-color_multipleCheckbox;
 
   ul {
     padding: 0;
     list-style: none;
-
-    [type="checkbox"].browser-default,
-    [type="checkbox"].browser-default:checked,
-    [type="checkbox"].browser-default:not(checked) {
-      opacity: 1;
-      position: relative;
-      margin-right: .5rem;
-      pointer-events: all;
-    }
-
-    [type="checkbox"].browser-default + span::before,
-    [type="checkbox"].browser-default + span::after,
-    [type="checkbox"].browser-default:checked + span::before,
-    [type="checkbox"].browser-default:checked + span::after {
-      display: none;
-    }
-
-    [type="checkbox"].browser-default + span:not(.lever) {
-      padding-left: 10px;
-    }
   }
-
 }
 
