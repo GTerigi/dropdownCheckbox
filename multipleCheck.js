@@ -89,6 +89,7 @@ class dropdownCheckbox {
             // Remove everything
             this.#checkData.splice(0, this.#checkData.length);
             this.#paragraph.splice(0, this.#paragraph.length);
+            this.#checkboxSel = 0;
             $(this.#body).find(`input`).prop("checked", false);
             this.#showHideParagraph();
         }
