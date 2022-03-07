@@ -1,10 +1,10 @@
-# minimal_checkbox_dropdown
+# dropdownCheckbox
 
 It's a minimal dropdown select with checkbox inside.
 
 Just download the minified file and link it as resource in your project. Use the .js and .scss file if you want to modify it.
 jQuery is a dependancy! make sure to import the jQuery script before this one. [You can download it here.](https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js)  
-## Working Fiddle on [CodePen](https://codepen.io/gterigi/pen/qBrgEOR)
+## Working Fiddle on [CodePen](https://codepen.io/gterigi/pen/abVxbeP)
 * * *
 
 # Method
